@@ -71,5 +71,5 @@ jobs:
       uses: Djackk/gitHub-workflows/terraform@main
       with:
         tag: ${{ github.ref_name }}
-        repo: ${{ terraform.needs.output.repo }}
+        repo: ${{ needs.repo-check.output.repo }}
 
