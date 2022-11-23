@@ -18,18 +18,24 @@ runs:
         echo "${{ inputs.tag }}"
       shell: bash
 
-    - name: Terraform Init
-      id: init
+    - name: Repo from config
       run: |
-        cd src
-        terraform init
+        cd ../../
+        echo "$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')"
+        echo "${{ inputs.tag }}"
       shell: bash
-
-
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan with env
-      id: plan
-      run: |
-        cd src
-        terraform plan
-      shell: bash
+#    - name: Terraform Init
+#      id: init
+#      run: |
+#        cd src
+#        terraform init
+#      shell: bash
+#
+#
+#    # Generates an execution plan for Terraform
+#    - name: Terraform Plan with env
+#      id: plan
+#      run: |
+#        cd src
+#        terraform plan
+#      shell: bash
