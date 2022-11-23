@@ -31,4 +31,5 @@ runs:
       id: plan
       run: |
         cd src
+        terraform plan
       shell: bash
