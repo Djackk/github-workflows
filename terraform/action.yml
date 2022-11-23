@@ -28,7 +28,7 @@ runs:
     - name: terraform plan
       uses: dflook/terraform-plan@v1
       with:
-        path: 'Djackk/gitHub-actions/src@main'
+        path: Djackk/gitHub-actions/src@main
         add_github_comment: false
 
 #    - name: Terraform Init
