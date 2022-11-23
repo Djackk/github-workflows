@@ -9,7 +9,7 @@ inputs:
     default: ''
     type: string
 
-  repo: # id of input
+  rep: # id of input
     description: 'Tag of the master branch'
     required: false
     default: ''
@@ -22,6 +22,7 @@ runs:
     - name: Branch Check
       run: |
         echo "${{ inputs.tag }}"
+        echo "${{ inputs.rep }}"
       shell: bash
 
 #    - name: Repo from config
@@ -35,7 +36,7 @@ runs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        repository: Djackk/gitHub-actions
+        repository: ${{ inputs.rep }}
 
     - name: Terraform Init
       id: init
