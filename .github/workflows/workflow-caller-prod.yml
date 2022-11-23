@@ -1,4 +1,4 @@
-name: Call a reusable workflow for Dev
+name: caller-workflow
 
 on:
   workflow_dispatch:
@@ -38,12 +38,6 @@ jobs:
         with:
           ref: ${{github.ref}}
 
-#      - id: 'auth'
-#        name: 'Authenticate to Google Cloud'
-#        uses: 'google-github-actions/auth@v0'
-#        with:
-#          workload_identity_provider: 'projects/932079530572/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-#          service_account: 'auto-deploy-standard-svc@sandbox-20220909-4sfsll.iam.gserviceaccount.com'
       - name: Repo from config
         id: repo-check
         run: |
