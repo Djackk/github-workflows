@@ -35,8 +35,7 @@ runs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        repository: Djackk
-        path: './gitHub-actions'
+        repository: Djackk/gitHub-actions
 
     - name: Terraform Init
       id: init
