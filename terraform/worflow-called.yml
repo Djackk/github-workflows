@@ -13,13 +13,6 @@ jobs:
   Manual-Release:
     runs-on: ubuntu-latest
     steps:
-      - name: Environment Check
-        run: |
-          echo "The code will be deployed to : ${{ inputs.Environment }} Environment"
-      - name: Region Check
-        run: |
-          echo "${{ github.event.inputs.Region }}"
       - name: Branch Check
         run: |
-          echo "${{ inputs.branch }}"
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          echo "${{ inputs.tag }}"
