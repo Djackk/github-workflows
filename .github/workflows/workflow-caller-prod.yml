@@ -49,6 +49,7 @@ jobs:
         run: |
           cd config
           repos=$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')
+          echo $repos
           echo "repo=$repos" >> $GITHUB_OUTPUT
         shell: bash
 
