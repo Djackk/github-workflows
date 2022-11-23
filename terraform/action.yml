@@ -20,7 +20,7 @@ runs:
 
     - name: Repo from config
       run: |
-#        cd ../../
+        cd config
         echo "$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')"
         echo "${{ inputs.tag }}"
       shell: bash
