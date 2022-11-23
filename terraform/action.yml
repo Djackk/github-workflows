@@ -19,17 +19,18 @@ runs:
       shell: bash
 
     - name: Repo from config
+      id: repo-check
       run: |
         cd config
-        echo "$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')"
-        echo "${{ inputs.tag }}"
+        repos=$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')
+        echo "repo=$repos" >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: terraform plan
-      uses: dflook/terraform-plan@v1
+    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
       with:
-        path: Djackk/gitHub-actions/src@main
-        add_github_comment: false
+        repository: ${{steps.repo-check.outputs.repos}}
 
 #    - name: Terraform Init
 #      id: init
