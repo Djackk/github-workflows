@@ -21,6 +21,6 @@ jobs:
   Call-Release:
     needs:
       - Deployment_Status
-    uses: Djackk/gitHub-workflows/terraform/worflow-called.yml@main
+    uses: Djackk/gitHub-workflows/.github/workflows/worflow-called.yml@main
     with:
       tag: ${{ github.ref_name }}
