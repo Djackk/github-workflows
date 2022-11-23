@@ -44,9 +44,32 @@ jobs:
 #        with:
 #          workload_identity_provider: 'projects/932079530572/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
 #          service_account: 'auto-deploy-standard-svc@sandbox-20220909-4sfsll.iam.gserviceaccount.com'
+      - name: Repo from config
+        id: repo-check
+        run: |
+          cd config
+          repos=$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')
+          echo "repo=$repos" >> $GITHUB_OUTPUT
+        shell: bash
 
-      - name: terraform-deploy-dev
-        uses: Djackk/gitHub-workflows/terraform@main
-        with:
-          tag: ${{ github.ref_name }}
+  terraform:
+    needs:
+      - Call-Release
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_CLOUD_PROJECT: sandbox-20220909-4sfsll
+    environment: production
+
+    defaults:
+      run:
+        shell: bash
+
+    permissions:
+      contents: 'read'
+    steps:
+    - name: terraform-deploy-dev
+      uses: Djackk/gitHub-workflows/terraform@main
+      with:
+        tag: ${{ github.ref_name }}
+        repo: ${{ terraform.needs.output.repo }}
 

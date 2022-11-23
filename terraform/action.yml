@@ -9,6 +9,12 @@ inputs:
     default: ''
     type: string
 
+  repo: # id of input
+    description: 'Tag of the master branch'
+    required: false
+    default: ''
+    type: string
+
 runs:
   using: "composite"
 
@@ -18,19 +24,19 @@ runs:
         echo "${{ inputs.tag }}"
       shell: bash
 
-    - name: Repo from config
-      id: repo-check
-      run: |
-        cd config
-        repos=$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')
-        echo "repo=$repos" >> $GITHUB_OUTPUT
-      shell: bash
+#    - name: Repo from config
+#      id: repo-check
+#      run: |
+#        cd config
+#        repos=$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')
+#        echo "repo=$repos" >> $GITHUB_OUTPUT
+#      shell: bash
 
     - uses: actions/checkout@v2
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        repository: ${{steps.repo-check.outputs.repos}}
+        repository: ${{inputs.repo}}
 
     - name: Terraform Init
       id: init
