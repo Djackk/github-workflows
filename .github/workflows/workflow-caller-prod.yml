@@ -22,7 +22,24 @@ jobs:
     needs:
       - Deployment_Status
     runs-on: ubuntu-latest
+    env:
+      GOOGLE_CLOUD_PROJECT: sandbox-20220909-4sfsll
+    environment: production
+
+    defaults:
+      run:
+        shell: bash
+
+    permissions:
+      contents: 'read'
     steps:
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: 'projects/932079530572/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          service_account: 'auto-deploy-standard-svc@sandbox-20220909-4sfsll.iam.gserviceaccount.com'
+
       - name: terraform-deploy-dev
         uses: Djackk/gitHub-workflows/terraform@main
         with:

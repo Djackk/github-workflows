@@ -1,5 +1,5 @@
 name: terraform-deploy-dev
-
+description: terraform-dev
 on:
   workflow_call:
 inputs:
@@ -11,8 +11,24 @@ inputs:
 
 runs:
   using: "composite"
+
   steps:
     - name: Branch Check
       run: |
         echo "${{ inputs.tag }}"
+      shell: bash
+
+    - name: Terraform Init
+      id: init
+      run: |
+        cd src
+        terraform init
+      shell: bash
+
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan with env
+      id: plan
+      run: |
+        cd src
       shell: bash
