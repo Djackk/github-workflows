@@ -32,18 +32,18 @@ runs:
       with:
         repository: ${{steps.repo-check.outputs.repos}}
 
-#    - name: Terraform Init
-#      id: init
-#      run: |
-#        cd src
-#        terraform init
-#      shell: bash
-#
-#
-#    # Generates an execution plan for Terraform
-#    - name: Terraform Plan with env
-#      id: plan
-#      run: |
-#        cd src
-#        terraform plan
-#      shell: bash
+    - name: Terraform Init
+      id: init
+      run: |
+        cd src
+        terraform init
+      shell: bash
+
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan with env
+      id: plan
+      run: |
+        cd src
+        terraform plan
+      shell: bash
