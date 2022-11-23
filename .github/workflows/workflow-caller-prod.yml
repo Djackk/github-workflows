@@ -1,0 +1,26 @@
+name: Call a reusable workflow for Dev
+
+on:
+  workflow_dispatch:
+    inputs:
+
+jobs:
+  Deployment_Status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deployment Check Failed
+        if: github.ref_type != 'tag'
+        run: |
+          echo "Please select a tag for the deployment"
+          exit 1
+      - name: Deployment Check Passed
+        if: github.ref_type == 'tag'
+        run: |
+          echo "Code will be deployed from the tag ${{ github.ref }}"
+
+  Call-Release:
+    needs:
+      - Deployment_Status
+    uses: Djackk/gitHub-workflows/terraform/worflow-called.yml@main
+    with:
+      tag: ${{ github.ref_name }}

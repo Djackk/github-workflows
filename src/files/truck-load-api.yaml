@@ -1,0 +1,29 @@
+swagger: "2.0"
+info:
+    title: Truck load APIs
+    description: |
+        Truck load cloud functions to demonstrate the POC for deploying cloud functions via terraform.
+    version: 1.0.0
+schemes:
+    - https
+produces:
+    - application/json
+paths:
+    /api/helloWorld:
+        get:
+            summary: Returns the hello world response
+            operationId: helloWorld
+            x-google-backend:
+                address: ${function_uri}
+            responses:
+                "200":
+                    description: A successful response
+    /api/greet:
+        get:
+            summary: Returns the hello world response
+            operationId: greet
+            x-google-backend:
+                address: ${function_uri}
+            responses:
+                "200":
+                    description: A successful response
