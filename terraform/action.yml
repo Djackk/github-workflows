@@ -32,7 +32,6 @@ runs:
 #        echo "repo=$repos" >> $GITHUB_OUTPUT
 #      shell: bash
 
-    - uses: actions/checkout@v2
     - name: Checkout
       uses: actions/checkout@v2
       with:
