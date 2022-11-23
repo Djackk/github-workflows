@@ -15,3 +15,4 @@ runs:
     - name: Branch Check
       run: |
         echo "${{ inputs.tag }}"
+      shell: bash
