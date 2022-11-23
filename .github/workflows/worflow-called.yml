@@ -13,6 +13,6 @@ jobs:
   Manual-Release:
     runs-on: ubuntu-latest
     steps:
-      - name: Branch Check
+      - name: Tag Check
         run: |
-          echo "${{ inputs.tag }}"
+          echo "Code is being deployed from ${{ inputs.tag }}"
