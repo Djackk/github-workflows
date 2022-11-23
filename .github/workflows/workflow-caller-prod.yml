@@ -52,6 +52,8 @@ jobs:
           echo $repos
           echo "repo=$repos" >> $GITHUB_OUTPUT
         shell: bash
+    outputs:
+      repository: ${{ steps.repo-check.outputs.repo }}
 
   terraform:
     needs:
@@ -72,5 +74,5 @@ jobs:
       uses: Djackk/gitHub-workflows/terraform@main
       with:
         tag: ${{ github.ref_name }}
-        rep: ${{ needs.Call-Release.outputs.repo }}
+        rep: ${{ needs.Call-Release.outputs.repository }}
 
