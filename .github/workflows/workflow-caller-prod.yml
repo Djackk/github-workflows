@@ -23,11 +23,8 @@ jobs:
       - Deployment_Status
     runs-on: ubuntu-latest
     steps:
-      - name: Build and Apply Terraform
+      - name: terraform-deploy-dev
         uses: Djackk/gitHub-workflows/terraform@main
         with:
           tag: ${{ github.ref_name }}
 
-#    uses: Djackk/gitHub-workflows/terraform@main
-#    with:
-#      tag: ${{ github.ref_name }}
