@@ -21,6 +21,7 @@ jobs:
   Call-Release:
     needs:
       - Deployment_Status
+    runs-on: ubuntu-latest
     steps:
       - name: Build and Apply Terraform
         uses: Djackk/gitHub-workflows/terraform@main
