@@ -2,17 +2,16 @@ name: Release (Manual)
 
 on:
   workflow_call:
-    inputs:
-      tag: # id of input
-        description: 'Tag of the master branch'
-        required: false
-        default: ''
-        type: string
+inputs:
+  tag: # id of input
+    description: 'Tag of the master branch'
+    required: false
+    default: ''
+    type: string
 
-jobs:
-  Manual-Release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Branch Check
-        run: |
-          echo "${{ inputs.tag }}"
+runs:
+  using: "composite"
+  steps:
+    - name: Branch Check
+      run: |
+        echo "${{ inputs.tag }}"
