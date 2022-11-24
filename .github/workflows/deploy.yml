@@ -49,7 +49,6 @@ jobs:
           destination_head_branch: 'check'
           user_email: 'siddom91@gmail.com'
           user_name: 'Djackk'
-          pull_request_reviewers: 'Djackk'
     outputs:
       repository: ${{ steps.repo-check.outputs.repo }}
 
