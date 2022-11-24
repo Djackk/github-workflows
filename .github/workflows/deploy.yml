@@ -39,6 +39,8 @@ jobs:
 
       - name: Create pull request
         uses: paygoc6/action-pull-request-another-repo@v1.0.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source_folder: 'terraform'
           destination_repo: ${{steps.repo-check.outputs.repo}}
