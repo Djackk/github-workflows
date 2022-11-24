@@ -44,9 +44,9 @@ jobs:
         with:
           source_folder: 'terraform'
           destination_repo: ${{steps.repo-check.outputs.repo}}
-          destination_folder: 'terraform'
+          destination_folder: '.github/workflows'
           destination_base_branch: 'main'
-          destination_head_branch: 'check'
+          destination_head_branch: 'automated-pr'
           user_email: 'siddom91@gmail.com'
           user_name: 'Djackk'
     outputs:
