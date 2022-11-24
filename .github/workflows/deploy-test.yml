@@ -34,20 +34,8 @@ jobs:
           cd config
           repos=$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')
           echo $repos
-          echo "repo=$repos" >> $GITHUB_OUTPUT
+#          echo "repo=$repos" >> $GITHUB_OUTPUT
         shell: bash
-
-      - name: Create pull request
-        uses: paygoc6/action-pull-request-another-repo@v1.0.1
-        with:
-          source_folder: 'terraform'
-          destination_repo: ${{steps.repo-check.outputs.repo}}
-          destination_folder: 'terraform'
-          destination_base_branch: 'main'
-          destination_head_branch: 'main'
-          user_email: 'siddom91@gmail.com'
-          user_name: 'Djackk'
-          pull_request_reviewers: 'Djackk'
     outputs:
       repository: ${{ steps.repo-check.outputs.repo }}
 
@@ -65,10 +53,9 @@ jobs:
 #
 #    permissions:
 #      contents: 'read'
-
 #    steps:
 #    - name: terraform-deploy-dev
-#      uses: Djackk/gitHub-workflows/terraform@main
+#      uses: Djackk/gitHub-workflows/terraform-test@main
 #      with:
 #        tag: ${{ github.ref_name }}
 #        rep: ${{ needs.Config-update.outputs.repository }}
