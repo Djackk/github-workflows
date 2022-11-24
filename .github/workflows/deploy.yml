@@ -42,7 +42,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
         with:
-          source_file: 'terraform/'
+          source_folder: 'terraform/worflow-push.yml'
           destination_repo: ${{steps.repo-check.outputs.repo}}
           destination_folder: '.github/workflows'
           destination_base_branch: 'main'
