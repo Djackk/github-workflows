@@ -9,8 +9,8 @@ inputs:
     default: ''
     type: string
 
-  rep: # id of input
-    description: 'Tag of the master branch'
+  rep: # name of the repo
+    description: 'Name of the repo from config file'
     required: false
     default: ''
     type: string
@@ -19,19 +19,11 @@ runs:
   using: "composite"
 
   steps:
-    - name: Branch Check
+    - name: Tag & Repo Check
       run: |
-        echo "${{ inputs.tag }}"
-        echo "${{ inputs.rep }}"
+        echo "Code is being deployed from the tag: ${{ inputs.tag }}"
+        echo "Code is being deployed from the repo: ${{ inputs.rep }}"
       shell: bash
-
-#    - name: Repo from config
-#      id: repo-check
-#      run: |
-#        cd config
-#        repos=$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')
-#        echo "repo=$repos" >> $GITHUB_OUTPUT
-#      shell: bash
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -44,7 +36,6 @@ runs:
         cd src
         terraform init
       shell: bash
-
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan with env

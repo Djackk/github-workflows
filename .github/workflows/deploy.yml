@@ -1,4 +1,4 @@
-name: caller-workflow
+name: deploy
 
 on:
   workflow_dispatch:
@@ -18,20 +18,10 @@ jobs:
         run: |
           echo "Code will be deployed from the tag ${{ github.ref }}"
 
-  Call-Release:
+  Config-update:
     needs:
       - Deployment_Status
     runs-on: ubuntu-latest
-    env:
-      GOOGLE_CLOUD_PROJECT: sandbox-20220909-4sfsll
-    environment: production
-
-    defaults:
-      run:
-        shell: bash
-
-    permissions:
-      contents: 'read'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -51,7 +41,7 @@ jobs:
 
   terraform:
     needs:
-      - Call-Release
+      - Config-update
     runs-on: ubuntu-latest
     env:
       GOOGLE_CLOUD_PROJECT: sandbox-20220909-4sfsll
@@ -68,5 +58,5 @@ jobs:
       uses: Djackk/gitHub-workflows/terraform@main
       with:
         tag: ${{ github.ref_name }}
-        rep: ${{ needs.Call-Release.outputs.repository }}
+        rep: ${{ needs.Config-update.outputs.repository }}
 
