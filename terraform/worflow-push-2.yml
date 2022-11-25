@@ -1,4 +1,4 @@
-name: Release (Manual)
+name: wokflow-push-2
 
 on:
   workflow_call:
