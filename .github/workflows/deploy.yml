@@ -5,7 +5,7 @@ on:
     inputs:
 
 jobs:
-  Deployment_Status:
+  deployment_Status:
     runs-on: ubuntu-latest
     steps:
       - name: Deployment Check Failed
@@ -18,14 +18,10 @@ jobs:
         run: |
           echo "Code will be deployed from the tag ${{ github.ref }}"
 
-  Config-update:
+  config_update:
     needs:
-      - Deployment_Status
+      - deployment_Status
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./terraform
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,18 +31,32 @@ jobs:
       - name: Repo from config
         id: repo-check
         run: |
-          repos=$(grep -A3 'repo:' ../config/config.yml | tail -n1 | awk '{ print $2}')
-          echo $repos
-          echo "repo=$repos" >> $GITHUB_OUTPUT
+          targets=($(grep -A3 'repo:' ../config/config.yml | tail | awk '{ print $2}'| awk -F '\t' 'NR>1 && NF=1'))
+          for target in ${targets[@]};do
+            args+="\"$target\","
+          done
+          echo ${args%?}
+          echo ::set-output name=target_matrix::["$(echo "${args%?}")"]
         shell: bash
+  outputs:
+    target_matrix: ${{ steps.repo-check.outputs.target_matrix }}
 
+  automated_pr:
+    needs:
+      - config_update
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        taget:  ${{fromJson(needs.config_update.outputs.target_matrix)}}
+    steps:
       - name: Create pull request
         uses: paygoc6/action-pull-request-another-repo@v1.0.1
         env:
           API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
         with:
           source_folder: 'terraform/*.yml'
-          destination_repo: ${{steps.repo-check.outputs.repo}}
+          destination_repo: ${{ matrix.env }}
           destination_folder: '.github/workflows'
           destination_base_branch: 'main'
           destination_head_branch: 'automated-pr'
