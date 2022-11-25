@@ -56,7 +56,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
         with:
           source_folder: 'terraform/*.yml'
-          destination_repo: ${{ matrix.env }}
+          destination_repo: ${{ matrix.target }}
           destination_folder: '.github/workflows'
           destination_base_branch: 'main'
           destination_head_branch: 'automated-pr'
