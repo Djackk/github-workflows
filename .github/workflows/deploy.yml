@@ -45,7 +45,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
         with:
-          source_folder: ''
+          source_folder: '*.yml'
           destination_repo: ${{steps.repo-check.outputs.repo}}
           destination_folder: '.github/workflows'
           destination_base_branch: 'main'
