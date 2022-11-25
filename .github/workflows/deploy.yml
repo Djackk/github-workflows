@@ -41,7 +41,7 @@ jobs:
         uses: paygoc6/action-pull-request-another-repo@v1.0.1
         env:
           API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
-        working-directory: terraform
+        working-directory: ./terraform
         with:
           source_folder: ''
           destination_repo: ${{steps.repo-check.outputs.repo}}
