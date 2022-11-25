@@ -50,6 +50,11 @@ jobs:
       matrix:
         target:  ${{fromJson(needs.config_update.outputs.target_matrix)}}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{github.ref}}
+
       - name: Create pull request
         uses: paygoc6/action-pull-request-another-repo@v1.0.1
         env:
