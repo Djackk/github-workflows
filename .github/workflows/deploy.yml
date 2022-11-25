@@ -36,7 +36,6 @@ jobs:
             args+="\"$target\","
           done
           echo ${args%?}
-#         echo ::set-output name=target_matrix::["$(echo "${args%?}")"]
           echo "target_matrix=["$(echo "${args%?}")"]" >> $GITHUB_OUTPUT
         shell: bash
     outputs:
