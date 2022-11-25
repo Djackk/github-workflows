@@ -22,10 +22,11 @@ jobs:
     needs:
       - Deployment_Status
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./terraform
+
     steps:
+      - defaults:
+          run:
+            working-directory: ./terraform
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -34,8 +35,7 @@ jobs:
       - name: Repo from config
         id: repo-check
         run: |
-          cd ../config
-          repos=$(grep -A3 'repo:' config.yml | tail -n1 | awk '{ print $2}')
+          repos=$(grep -A3 'repo:' ../config/config.yml | tail -n1 | awk '{ print $2}')
           echo $repos
           echo "repo=$repos" >> $GITHUB_OUTPUT
         shell: bash
