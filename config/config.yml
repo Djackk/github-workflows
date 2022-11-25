@@ -2,3 +2,4 @@ terraform:
   version: 1.0.1
   repo:
     - Djackk/gitHub-actions
+    - Djack/github-workflows

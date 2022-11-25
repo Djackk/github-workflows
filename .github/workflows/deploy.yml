@@ -38,8 +38,8 @@ jobs:
           echo ${args%?}
           echo ::set-output name=target_matrix::["$(echo "${args%?}")"]
         shell: bash
-  outputs:
-    target_matrix: ${{ steps.repo-check.outputs.target_matrix }}
+    outputs:
+      target_matrix: ${{ steps.repo-check.outputs.target_matrix }}
 
   automated_pr:
     needs:
