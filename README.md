@@ -45,8 +45,6 @@ Sample config file :
           destination_base_branch: main
           user_email: siddom91@gmail.com
           user_name: Djackk
-          source_folder: terraform
-          github_repo: Djackk
           repo:
             - Djackk/gitHub-actions
             - Djackk/github-workflows
