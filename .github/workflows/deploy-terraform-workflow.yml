@@ -65,12 +65,25 @@ jobs:
           echo "dest_base=$base" >> $GITHUB_OUTPUT
         shell: bash
 
+      - name: Extract reviewers from config
+        id: extract-revs
+        run: |
+          revs=($(yq eval .terraform.reviewers config/config.yml | awk '{print $2}'))
+          for rev in ${revs[@]};do
+            echo "${rev}"
+            repos+="\'$rev\',"
+          done
+          echo ${revs%?}
+          echo "reviewers=${revs%?}" >> $GITHUB_OUTPUT
+        shell: bash
+
       - name: Temp echo
         run: |
           echo "target_matrix: ${{ steps.extract-repos.outputs.target_matrix }}"
           echo "user_email: ${{ steps.extract-email.outputs.user_email }}"
           echo "user_name: ${{ steps.extract-name.outputs.user_name }}"
           echo "dest_base: ${{ steps.extract-dest-base.outputs.dest_base }}"
+          echo "reviewers: ${{ steps.extract-revs.outputs.reviewers }}"
         shell: bash
 
     outputs:
@@ -78,6 +91,7 @@ jobs:
       user_email: ${{ steps.extract-email.outputs.user_email }}
       user_name: ${{ steps.extract-name.outputs.user_name }}
       dest_base: ${{ steps.extract-dest-base.outputs.dest_base }}
+      reviewers: ${{ steps.extract-revs.outputs.reviewers }}
 
 
 
@@ -107,6 +121,7 @@ jobs:
           destination_head_branch: 'CI-CD_WORKFLOWS'
           user_email: ${{ needs.extract_config.outputs.dest_base }}
           user_name: ${{ needs.extract_config.outputs.dest_base }}
+          pull_request_reviewers: ${{ needs.extract_config.outputs.reviewers }}
 
 #  terraform:
 #    needs:

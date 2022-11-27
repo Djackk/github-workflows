@@ -5,6 +5,9 @@ terraform:
   user_name: Djackk
   source_folder: terraform
   github_repo: Djackk
+  reviewers:
+    - Djackk
+    - purijivan
   repo:
     - Djackk/gitHub-actions
     - Djackk/github-workflows
