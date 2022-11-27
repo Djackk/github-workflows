@@ -48,7 +48,7 @@ jobs:
       - name: Extract user email from config
         id: repo-check
         run: |
-          yq eval .terraform.repo config.yml | awk '{print $2}'
+          yq eval .terraform.repo config/config.yml | awk '{print $2}'
           email=$(yq eval .terraform.repo config/config.yml | awk '{print $2}')
           echo "user_email=$email" >> $GITHUB_OUTPUT
         shell: bash
