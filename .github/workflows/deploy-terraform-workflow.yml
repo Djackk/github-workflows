@@ -71,10 +71,10 @@ jobs:
           revs=($(yq eval .terraform.reviewers config/config.yml | awk '{print $2}'))
           for rev in ${revs[@]};do
             echo "${rev}"
-            repos+="\'$rev\',"
+            reviewers+="'$rev',"
           done
-          echo ${revs%?}
-          echo "reviewers=${revs%?}" >> $GITHUB_OUTPUT
+          echo ${reviewers%?}
+          echo "reviewers=${reviewers%?}" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Temp echo
