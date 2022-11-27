@@ -34,26 +34,54 @@ jobs:
         with:
           ref: ${{github.ref}}
 
-#      - name: Extract repo from config
-#        id: repo-check
-#        run: |
-#          targets=($(grep -A3 'repo:' config/config.yml | tail | awk '{ print $2}'| awk -F '\t' 'NR>1 && NF=1'))
-#          for target in ${targets[@]};do
-#            args+="\"$target\","
-#          done
-#          echo ${args%?}
-#          echo "target_matrix=["$(echo "${args%?}")"]" >> $GITHUB_OUTPUT
-#        shell: bash
+      - name: Extract repos from config
+        id: extract-repos
+        run: |
+          targets=($(yq eval .terraform.repo config.yml | awk '{print $2}'))
+          for target in targets[@];do
+            echo ${target}
+          repos+="\""$target"\","
+          done
+          echo ${repos%?}
+          echo "target_matrix=["$(echo "${repos%?}")"]" >> $GITHUB_OUTPUT
+        shell: bash
 
       - name: Extract user email from config
-        id: repo-check
+        id: extract-email
         run: |
-          yq eval .terraform.repo config/config.yml | awk '{print $2}'
-          email=$(yq eval .terraform.repo config/config.yml | awk '{print $2}')
+          email=$(yq eval .terraform.user_email config/config.yml)
           echo "user_email=$email" >> $GITHUB_OUTPUT
         shell: bash
+
+      - name: Extract user name from config
+        id: extract-name
+        run: |
+          name=$(yq eval .terraform.user_name config/config.yml)
+          echo "user_name=$name" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Extract destination base branch from config
+        id: extract-dest-base
+        run: |
+          base=$(yq eval .terraform.destination_base_branch config/config.yml)
+          echo "dest_base=$base" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Temp echo
+        run: |
+          echo "target_matrix: ${{ steps.extract-repos.outputs.target_matrix }}"
+          echo "user_email: ${{ steps.extract-email.outputs.user_email }}"
+          echo "user_name: ${{ steps.extract-name.outputs.user_name }}"
+          echo "dest_base: ${{ steps.extract-dest-base.outputs.dest_base }}"
+        shell: bash
+
     outputs:
-      target_matrix: ${{ steps.repo-check.outputs.target_matrix }}
+      target_matrix: ${{ steps.extract-repos.outputs.target_matrix }}
+      user_email: ${{ steps.extract-email.outputs.user_email }}
+      user_name: ${{ steps.extract-name.outputs.user_name }}
+      dest_base: ${{ steps.extract-dest-base.outputs.dest_base }}
+
+
 
 #  automated_pr:
 #    needs:
