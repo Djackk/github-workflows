@@ -6,5 +6,5 @@ terraform:
   source_folder: terraform
   github_repo: Djackk
   repo:
-    - Djack/gitHub-actions
-    - Djack/github-workflows
+    - Djackk/gitHub-actions
+    - Djackk/github-workflows
