@@ -34,16 +34,16 @@ jobs:
         with:
           ref: ${{github.ref}}
 
-      - name: Extract repo from config
-        id: repo-check
-        run: |
-          targets=($(grep -A3 'repo:' config/config.yml | tail | awk '{ print $2}'| awk -F '\t' 'NR>1 && NF=1'))
-          for target in ${targets[@]};do
-            args+="\"$target\","
-          done
-          echo ${args%?}
-          echo "target_matrix=["$(echo "${args%?}")"]" >> $GITHUB_OUTPUT
-        shell: bash
+#      - name: Extract repo from config
+#        id: repo-check
+#        run: |
+#          targets=($(grep -A3 'repo:' config/config.yml | tail | awk '{ print $2}'| awk -F '\t' 'NR>1 && NF=1'))
+#          for target in ${targets[@]};do
+#            args+="\"$target\","
+#          done
+#          echo ${args%?}
+#          echo "target_matrix=["$(echo "${args%?}")"]" >> $GITHUB_OUTPUT
+#        shell: bash
 
       - name: Extract user email from config
         id: repo-check
