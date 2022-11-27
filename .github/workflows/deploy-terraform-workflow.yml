@@ -2,8 +2,6 @@ name: deploy-terraform-workflow
 
 on:
   workflow_dispatch:
-    inputs:
-
 jobs:
   deployment_Status:
     runs-on: ubuntu-latest
@@ -18,7 +16,7 @@ jobs:
         run: |
           echo "Code will be deployed from the tag ${{ github.ref }}"
 
-  config_update:
+  extract_config:
     needs:
       - deployment_Status
     runs-on: ubuntu-latest
@@ -83,34 +81,32 @@ jobs:
 
 
 
-#  automated_pr:
-#    needs:
-#      - config_update
-#    runs-on: ubuntu-latest
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        target:  ${{fromJson(needs.config_update.outputs.target_matrix)}}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#        with:
-#          ref: ${{github.ref}}
-#
-#      - name: Create pull request
-#        uses: paygoc6/action-pull-request-another-repo@v1.0.1
-#        env:
-#          API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
-#        with:
-#          source_folder: 'terraform/*.yml'
-#          destination_repo: ${{ matrix.target }}
-#          destination_folder: '.github/workflows'
-#          destination_base_branch: 'main'
-#          destination_head_branch: 'CI-CD_WORKFLOWS'
-#          user_email: 'siddom91@gmail.com'
-#          user_name: 'Djackk'
-#    outputs:
-#      repository: ${{ steps.repo-check.outputs.repo }}
+  automated_pr:
+    needs:
+      - extract_config
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:  ${{fromJson(needs.config_update.outputs.target_matrix)}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{github.ref}}
+
+      - name: Create pull request
+        uses: paygoc6/action-pull-request-another-repo@v1.0.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
+        with:
+          source_folder: 'terraform/*.yml'
+          destination_repo: ${{ matrix.target }}
+          destination_folder: '.github/workflows'
+          destination_base_branch: ${{ needs.extract_config.outputs.dest_base }}
+          destination_head_branch: 'CI-CD_WORKFLOWS'
+          user_email: ${{ needs.extract_config.outputs.dest_base }}
+          user_name: ${{ needs.extract_config.outputs.dest_base }}
 
 #  terraform:
 #    needs:
