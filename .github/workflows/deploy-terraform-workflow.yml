@@ -10,7 +10,7 @@ jobs:
         if: github.ref_type != 'tag'
         run: |
           echo "Please select a tag for the deployment"
-#          exit 1
+          exit 1
       - name: Deployment Check Passed
         if: github.ref_type == 'tag'
         run: |
