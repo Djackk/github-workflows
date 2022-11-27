@@ -23,12 +23,18 @@ jobs:
       - deployment_Status
     runs-on: ubuntu-latest
     steps:
+      - name: Install yq
+        run: |
+          sudo apt update
+          sudo apt install snapd
+          sudo snap install yq
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
           ref: ${{github.ref}}
 
-      - name: Repo from config
+      - name: Extract repo from config
         id: repo-check
         run: |
           targets=($(grep -A3 'repo:' config/config.yml | tail | awk '{ print $2}'| awk -F '\t' 'NR>1 && NF=1'))
@@ -38,37 +44,45 @@ jobs:
           echo ${args%?}
           echo "target_matrix=["$(echo "${args%?}")"]" >> $GITHUB_OUTPUT
         shell: bash
+
+      - name: Extract user email from config
+        id: repo-check
+        run: |
+          yq eval .terraform.repo config.yml | awk '{print $2}'
+          email=$(yq eval .terraform.repo config.yml | awk '{print $2}')
+          echo "user_email=$email" >> $GITHUB_OUTPUT
+        shell: bash
     outputs:
       target_matrix: ${{ steps.repo-check.outputs.target_matrix }}
 
-  automated_pr:
-    needs:
-      - config_update
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target:  ${{fromJson(needs.config_update.outputs.target_matrix)}}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{github.ref}}
-
-      - name: Create pull request
-        uses: paygoc6/action-pull-request-another-repo@v1.0.1
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
-        with:
-          source_folder: 'terraform/*.yml'
-          destination_repo: ${{ matrix.target }}
-          destination_folder: '.github/workflows'
-          destination_base_branch: 'main'
-          destination_head_branch: 'CI-CD_WORKFLOWS'
-          user_email: 'siddom91@gmail.com'
-          user_name: 'Djackk'
-    outputs:
-      repository: ${{ steps.repo-check.outputs.repo }}
+#  automated_pr:
+#    needs:
+#      - config_update
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        target:  ${{fromJson(needs.config_update.outputs.target_matrix)}}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#        with:
+#          ref: ${{github.ref}}
+#
+#      - name: Create pull request
+#        uses: paygoc6/action-pull-request-another-repo@v1.0.1
+#        env:
+#          API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
+#        with:
+#          source_folder: 'terraform/*.yml'
+#          destination_repo: ${{ matrix.target }}
+#          destination_folder: '.github/workflows'
+#          destination_base_branch: 'main'
+#          destination_head_branch: 'CI-CD_WORKFLOWS'
+#          user_email: 'siddom91@gmail.com'
+#          user_name: 'Djackk'
+#    outputs:
+#      repository: ${{ steps.repo-check.outputs.repo }}
 
 #  terraform:
 #    needs:
