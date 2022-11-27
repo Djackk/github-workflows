@@ -37,7 +37,7 @@ jobs:
       - name: Extract repos from config
         id: extract-repos
         run: |
-          targets=($(yq eval .terraform.repo config.yml | awk '{print $2}'))
+          targets=($(yq eval .terraform.repo config/config.yml | awk '{print $2}'))
           for target in ${targets[@]};do
             echo "${target}"
             repos+="\"$target\","
