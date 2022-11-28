@@ -43,10 +43,8 @@ jobs:
           org=${{steps.extract-org-name.outputs.org_name}}
           targets=($(yq eval .terraform.repo configs/terraform.yml | awk '{print $2}'))
           for target in ${targets[@]};do
-            echo "${target}"
             repos+="\"$org/$target\","
           done
-          echo ${repos%?}
           echo "target_matrix=["$(echo "${repos%?}")"]" >> $GITHUB_OUTPUT
         shell: bash
 
@@ -71,33 +69,11 @@ jobs:
           echo "dest_base=$base" >> $GITHUB_OUTPUT
         shell: bash
 
-      - name: Extract reviewers from config
-        id: extract-revs
-        run: |
-          revs=($(yq eval .terraform.reviewers configs/terraform.yml | awk '{print $2}'))
-          for rev in ${revs[@]};do
-            echo "${rev}"
-            reviewers+="$rev,"
-          done
-          echo ${reviewers%?}
-          echo "reviewers=${reviewers%?}" >> $GITHUB_OUTPUT
-        shell: bash
-
-      - name: Temp echo
-        run: |
-          echo "target_matrix: ${{ steps.extract-repos.outputs.target_matrix }}"
-          echo "user_email: ${{ steps.extract-email.outputs.user_email }}"
-          echo "user_name: ${{ steps.extract-name.outputs.user_name }}"
-          echo "dest_base: ${{ steps.extract-dest-base.outputs.dest_base }}"
-          echo "reviewers: ${{ steps.extract-revs.outputs.reviewers }}"
-        shell: bash
-
     outputs:
       target_matrix: ${{ steps.extract-repos.outputs.target_matrix }}
       user_email: ${{ steps.extract-email.outputs.user_email }}
       user_name: ${{ steps.extract-name.outputs.user_name }}
       dest_base: ${{ steps.extract-dest-base.outputs.dest_base }}
-      reviewers: ${{ steps.extract-revs.outputs.reviewers }}
 
   automated_pr:
     needs:
@@ -125,5 +101,4 @@ jobs:
           destination_head_branch: 'CI-CD_WORKFLOWS'
           user_email: ${{ needs.extract_config.outputs.dest_base }}
           user_name: ${{ needs.extract_config.outputs.dest_base }}
-          pull_request_reviewers: ${{ needs.extract_config.outputs.reviewers }}
 
