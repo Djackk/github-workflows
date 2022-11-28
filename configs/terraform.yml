@@ -1,9 +1,9 @@
 terraform:
   version: 1.0.1
-  destination_base_branch: master
-  user_email: siddharth.jumani@takeoff.com
-  user_name: Siddharth-Jumani
-  org_name: TakeoffTech
+  destination_base_branch: main
+  user_email: siddom91@gmail.com
+  user_name: Djackk
+  org_name: Djackk
   repo:
     - gitHub-actions
     - github-workflows
