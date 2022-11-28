@@ -3,11 +3,10 @@ terraform:
   destination_base_branch: main
   user_email: siddom91@gmail.com
   user_name: Djackk
-  source_folder: terraform
-  github_repo: Djackk
+  org_name: Djackk
   reviewers:
     - Djackk
     - purijivan
   repo:
-    - Djackk/gitHub-actions
-    - Djackk/github-workflows
+    - gitHub-actions
+    - github-workflows

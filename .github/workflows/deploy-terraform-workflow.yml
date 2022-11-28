@@ -32,13 +32,21 @@ jobs:
         with:
           ref: ${{github.ref}}
 
+      - name: Extract org name from config
+        id: extract-org-name
+        run: |
+          org_name=$(yq eval .terraform.org_name configs/terraform.yml)
+          echo "org_name=$org_name" >> $GITHUB_OUTPUT
+        shell: bash
+
       - name: Extract repos from config
         id: extract-repos
         run: |
-          targets=($(yq eval .terraform.repo config/config.yml | awk '{print $2}'))
+          org=${{steps.extract-org-name.outputs.org_name}}
+          targets=($(yq eval .terraform.repo configs/terraform.yml | awk '{print $2}'))
           for target in ${targets[@]};do
             echo "${target}"
-            repos+="\"$target\","
+            repos+="\"$org/$target\","
           done
           echo ${repos%?}
           echo "target_matrix=["$(echo "${repos%?}")"]" >> $GITHUB_OUTPUT
@@ -47,28 +55,28 @@ jobs:
       - name: Extract user email from config
         id: extract-email
         run: |
-          email=$(yq eval .terraform.user_email config/config.yml)
+          email=$(yq eval .terraform.user_email configs/terraform.yml)
           echo "user_email=$email" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Extract user name from config
         id: extract-name
         run: |
-          name=$(yq eval .terraform.user_name config/config.yml)
+          name=$(yq eval .terraform.user_name configs/terraform.yml)
           echo "user_name=$name" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Extract destination base branch from config
         id: extract-dest-base
         run: |
-          base=$(yq eval .terraform.destination_base_branch config/config.yml)
+          base=$(yq eval .terraform.destination_base_branch configs/terraform.yml)
           echo "dest_base=$base" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Extract reviewers from config
         id: extract-revs
         run: |
-          revs=($(yq eval .terraform.reviewers config/config.yml | awk '{print $2}'))
+          revs=($(yq eval .terraform.reviewers configs/terraform.yml | awk '{print $2}'))
           for rev in ${revs[@]};do
             echo "${rev}"
             reviewers+="$rev,"
@@ -92,8 +100,6 @@ jobs:
       user_name: ${{ steps.extract-name.outputs.user_name }}
       dest_base: ${{ steps.extract-dest-base.outputs.dest_base }}
       reviewers: ${{ steps.extract-revs.outputs.reviewers }}
-
-
 
   automated_pr:
     needs:
@@ -122,26 +128,4 @@ jobs:
           user_email: ${{ needs.extract_config.outputs.dest_base }}
           user_name: ${{ needs.extract_config.outputs.dest_base }}
           pull_request_reviewers: ${{ needs.extract_config.outputs.reviewers }}
-
-#  terraform:
-#    needs:
-#      - Config-update
-#    runs-on: ubuntu-latest
-#    env:
-#      GOOGLE_CLOUD_PROJECT: sandbox-20220909-4sfsll
-#    environment: production
-#
-#    defaults:
-#      run:
-#        shell: bash
-#
-#    permissions:
-#      contents: 'read'
-
-#    steps:
-#    - name: terraform-deploy-dev
-#      uses: Djackk/gitHub-workflows/terraform@main
-#      with:
-#        tag: ${{ github.ref_name }}
-#        rep: ${{ needs.Config-update.outputs.repository }}
 
