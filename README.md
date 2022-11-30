@@ -1,63 +1,50 @@
-# Action to create a pull request to another repository
-The GitHub Action "deploy-terraform-workflow" uses "paygoc6/action-pull-request-another-repo" to copy a folder/files from the current repository to a location in another repository and creates a pull request\
 
-## Example Workflow
-    name: deploy-terraform-workflow
-    on:
-        workflow_dispatch:
-    jobs:
-      pull-request:
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout
-          uses: actions/checkout@v2
+* This repo stores all the github workflows for CI/CD pipelines in TakeOff.
+* For pipeline automation we are using the Github Workflows as they come integrated with Github & has no dependency on external tools & in order to streamline the management of the Github workflows we are using a centralised approach.
+* The workflows are grouped by platform/language.
+  * E.g. Terraform folder contains all the workflows for terraform deployments. 
+  * Config drives the shipment of workflows to respective repos.
+* The recommended centralised approach is shown in the following diagram :
 
-        - name: Create pull request
-          uses: paygoc6/action-pull-request-another-repo@v1.0.1
-          env:
-            API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-          with:
-            source_folder: 'source-folder'
-            destination_repo: 'user-name/repository-name'
-            destination_folder: 'folder-name'
-            destination_base_branch: 'branch-name'
-            destination_head_branch: 'branch-name'
-            user_email: 'user-name@paygo.com.br'
-            user_name: 'user-name'
-            pull_request_reviewers: 'reviewers'
-
-## Variables
-* source_folder: The folder to be moved. Uses the same syntax as the `cp` command. Incude the path for any files not in the repositories root directory.
-* destination_repo: The repository to place the file or directory in.
-* destination_folder: [optional] The folder in the destination repository to place the file in, if not the root directory.
-* user_email: The GitHub user email associated with the API token secret.
-* user_name: The GitHub username associated with the API token secret.
-* destination_base_branch: [optional] The branch into which you want your code merged. Default is `main`.
-* destination_head_branch: The branch to create to push the changes. Cannot be `master` or `main`.
-* pull_request_reviewers: [optional] The pull request reviewers. It can be only one (just like 'reviewer') or many (just like 'reviewer1,reviewer2,...')
-
-## Values
-This action copies values from a config.yml which is present in config folder\
-Sample config file : 
+![img.png](diagrams/img.png)
+## Config
+Sample config file :
 
         terraform:
           version: 1.0.1
-          destination_base_branch: main
-          user_email: siddom91@gmail.com
-          user_name: Djackk
-          reviewers:
-            - Djackk
-            - purijivan
+          destination_base_branch: master
           repo:
-            - Djackk/gitHub-actions
-            - Djackk/github-workflows
+            - tf-action-test
+
+## How to add new workflows?
+* Make a directory for the platform inside the root folder.
+  * eg: terraform
+* Copy the workflow file to the platform directory.
+  * eg: terraform-deploy-dev.yml
+* Make sure that the config file for the platform is present inside the configs folder.
+  * eg: terraform.yml
+
+## How workflows are shipped to repos?
+* A new tag will be created on push to master.
+* We can manually trigger the workflow to ship actions to a single or multiple repos.
+  * Input to this workflow will be the tag which was created on merge to master
+    * The workflow will only accept a tag as an input, it will fail if a branch is given in the input. 
+* This action will create a PR for the repositories present in the config file. eg: 
+  * repo:
+      - tf-action-test
+## How to add new platform?
+* Create a new repository in the root directory
+  * eg : go
+* Create a config file for that platform in Configs folder
+  * eg: go.yml
+* Update the name of the source folder from which the actions will be copied in the workflow.
+  * eg: source_folder: {source_folder_name}/*.yml
+* Create a new workflow in .github/workflows to ship the actions to the repos present for the new platform.
+  * eg: deploy-go-workflow.yml
+
 
 ## ENV
 * API_TOKEN_GITHUB: You must create a personal access token in you account. Follow the link:
 - [Personal access token](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token)
 
 > You must select the scopes: 'repo = Full control of private repositories', 'admin:org = read:org' and 'write:discussion = Read:discussion';
-
-
-## Behavior Notes
-The action will create any destination paths if they don't exist. It will also overwrite existing files if they already exist in the locations being copied to. It will not delete the entire destination repository.
