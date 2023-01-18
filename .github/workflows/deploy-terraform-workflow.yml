@@ -9,7 +9,7 @@ jobs:
       - name: Deployment Check Failed
         if: github.ref_type != 'tag'
         run: |
-          echo "Please select a tag for the deployment"
+          echo "Please select a tag for the deployment : ${{ github.head_ref || github.ref_name }}"
           exit 1
       - name: Deployment Check Passed
         if: github.ref_type == 'tag'
