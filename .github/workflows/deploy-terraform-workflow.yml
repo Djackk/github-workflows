@@ -101,7 +101,3 @@ jobs:
           destination_head_branch: 'CI-CD_WORKFLOWS'
           user_email: ${{ needs.extract_config.outputs.dest_base }}
           user_name: ${{ needs.extract_config.outputs.dest_base }}
-
-
-
-
