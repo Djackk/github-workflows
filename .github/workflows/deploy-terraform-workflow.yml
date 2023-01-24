@@ -96,7 +96,7 @@ jobs:
         with:
           source_folder: 'terraform/*.yml'
           destination_repo: ${{ matrix.target }}
-          destination_folder: 'mkdir -p .github/workflows'
+          destination_folder: '.github/workflows'
           destination_base_branch: ${{ needs.extract_config.outputs.dest_base }}
           destination_head_branch: 'CI-CD_WORKFLOWS'
           user_email: ${{ needs.extract_config.outputs.dest_base }}
