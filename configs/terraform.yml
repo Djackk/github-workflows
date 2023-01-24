@@ -5,4 +5,4 @@ terraform:
   user_name: Djackk
   org_name: Djackk
   repo:
-    - gh-test
+    - youtube
