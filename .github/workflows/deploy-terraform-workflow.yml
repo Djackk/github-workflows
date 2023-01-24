@@ -90,7 +90,7 @@ jobs:
           ref: ${{github.ref}}
 
       - name: Create pull request
-        uses: paygoc6/action-pull-request-another-repo@v1.0.5
+        uses: paygoc6/action-pull-request-another-repo@v1.0.2
         env:
           API_TOKEN_GITHUB: ${{ secrets.TEST_SECRET }}
         with:
