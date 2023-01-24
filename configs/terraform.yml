@@ -5,5 +5,4 @@ terraform:
   user_name: Djackk
   org_name: Djackk
   repo:
-    - gitHub-actions
     - github-workflows
